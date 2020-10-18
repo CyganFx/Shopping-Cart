@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 @WebServlet(name = "Servlets.LoginServlet")
 public class LoginServlet extends HttpServlet {
-    static ArrayList<Product> list = new ArrayList<>();
     static ArrayList<String> cartlist = new ArrayList<>();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,7 +47,6 @@ public class LoginServlet extends HttpServlet {
                     HttpSession session = request.getSession();
                     User user = new User();
 
-                    session.setAttribute("list", list);
                     session.setAttribute("cartlist", cartlist);
 
                     user.setEmail(email);

@@ -21,10 +21,21 @@
 
 <a href="productsController?page=showcart">Cart has (<c:out value="${productsCounter}"/>) items</a> <br> <br>
 
+<h3>Sort by(Price):</h3>
+<form action="productsController" method="get">
+    <input type="hidden" name="page" value="price-sort">
+    <input type="hidden" name="action" value="furniture">
+    <select name="sort">
+        <option value="low-to-high">Low to high</option>
+        <option value="high-to-high">high to low</option>
+    </select>
+    <input type="submit" value="Sort">
+</form>
+
 <c:forEach items="${list}" var="product">
     <c:if test="${product.getCategory() == 'furniture' }">
         <div class="table-users">
-            <div class="header">Product ID: ${product.getId()}</div>
+            <div class="header">Furniture Product ID: ${product.getId()}</div>
             <table style="width:100%" cellspacing="0">
                 <tr>
                     <th>Image</th>
@@ -38,9 +49,10 @@
                     <td><c:out value="${product.getName()}"/></td>
                     <td><c:out value="${ product.getPrice()} tenge"/></td>
                     <td><a href="FileDownloadServlet?filename=${product.getImage()}">Download</a></td>
-                    <td><a href="productsController?page=addToCart&action=furniture&id=<c:out value="${product.getId()}"/>">Add
-                        to
-                        Cart</a></td>
+                    <td>
+                        <a href="productsController?page=addToCart&action=furniture&id=<c:out value="${product.getId()}"/>">Add
+                            to
+                            Cart</a></td>
                 </tr>
             </table>
         </div>
