@@ -20,7 +20,7 @@
 </c:forEach>
 
 <a href="productsController?page=showcart">Cart has (<c:out value="${productsCounter}"/>) items</a> <br> <br>
-
+<a href="welcome.jsp">Home</a> <br>
 <h3>Sort by(Price):</h3>
 <form action="productsController" method="get">
     <input type="hidden" name="page" value="price-sort">

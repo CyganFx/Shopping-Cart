@@ -22,6 +22,12 @@
         }
     }
 %>
+<c:set var="productsCounter" value="0"/>
+<c:forEach items="${cartlist }" var="products">
+    <c:set var="productsCounter" value="${productsCounter + products.value }"/>
+</c:forEach>
+
+<a href="welcome.jsp">Home</a> <br>
 
 <c:set var="productsCounter" value="0"/>
 <c:forEach items="${cartlist }" var="products">

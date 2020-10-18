@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" errorPage="errorPage.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Welcome</title>
@@ -33,7 +34,12 @@
     }
 }
 %>
+<c:set var="productsCounter" value="0"/>
+<c:forEach items="${cartlist }" var="products">
+    <c:set var="productsCounter" value="${productsCounter + products.value }"/>
+</c:forEach>
 
+<a href="productsController?page=showcart">Cart has (<c:out value="${productsCounter}"/>) items</a> <br> <br>
 <%-- Using JSTL to get data from sessions --%>
 
 <h1>Welcome ${first_name}!</h1>
