@@ -16,7 +16,7 @@
 
 <c:set var="productsCounter" value="0"/>
 <c:forEach items="${cartlist }" var="products">
-    <c:set var="productsCounter" value="${productsCounter + 1 }"/>
+    <c:set var="productsCounter" value="${productsCounter + products.value }"/>
 </c:forEach>
 
 <a href="productsController?page=showcart">Cart has (<c:out value="${productsCounter}"/>) items</a> <br> <br>
@@ -41,18 +41,22 @@
                     <th>Image</th>
                     <th>Name</th>
                     <th>Price</th>
+                    <th>Amount</th>
                     <th>Download</th>
                     <th>Add To Cart</th>
                 </tr>
                 <tr>
-                    <td><img src="images/${product.getImage()}" height="150px" width="150px"></td>
-                    <td><c:out value="${product.getName()}"/></td>
-                    <td><c:out value="${ product.getPrice()} tenge"/></td>
-                    <td><a href="FileDownloadServlet?filename=${product.getImage()}">Download</a></td>
-                    <td>
-                        <a href="productsController?page=addToCart&action=furniture&id=<c:out value="${product.getId()}"/>">Add
-                            to
-                            Cart</a></td>
+                    <form action="productsController" method="post">
+                        <td><img src="images/${product.getImage()}" height="150px" width="150px"></td>
+                        <td><c:out value="${product.getName()}"/></td>
+                        <td><c:out value="${ product.getPrice()} tenge"/></td>
+                        <td><input type="number" name="amount"></td>
+                        <td><a href="FileDownloadServlet?filename=${product.getImage()}">Download</a></td>
+                        <input type="hidden" name="page" value="addToCart"/>
+                        <input type="hidden" name="action" value="${product.getCategory()}"/>
+                        <input type="hidden" name="id" value="<c:out value="${product.getId()}"/>"/>
+                        <td><input type="submit" value="Add to Cart"></td>
+                    </form>
                 </tr>
             </table>
         </div>

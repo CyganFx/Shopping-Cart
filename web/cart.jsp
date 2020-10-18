@@ -13,23 +13,19 @@
     <title>Title</title>
 </head>
 <body>
-<%--Cart expire after 60 sec of inactivity--%>
 <%
-    Cookie cartExpireTime = new Cookie("cartExpireTime", "0");
-    cartExpireTime.setMaxAge(10);
-    response.addCookie(cartExpireTime);
-
     Cookie[] cookies = request.getCookies();
     PrintWriter pw = response.getWriter();
     for (Cookie cookie : cookies) {
         if (cookie.getName().equals("counter")) {
-            pw.println("This session visited website " + cookie.getValue() + " times");
+            pw.println("This session visited website " + cookie.getValue() + " times (Cookie)");
         }
     }
 %>
+
 <c:set var="productsCounter" value="0"/>
 <c:forEach items="${cartlist }" var="products">
-    <c:set var="productsCounter" value="${productsCounter + 1 }"/>
+    <c:set var="productsCounter" value="${productsCounter + products.value }"/>
 </c:forEach>
 
 <c:choose>
@@ -42,29 +38,32 @@
 </c:choose>
 
 <c:set var="totalPrice" value="0"/>
+
 <c:forEach items="${cartlist}" var="products">
     <c:forEach items="${list}" var="product">
-        <c:if test="${products == product.getId() }">
-            <div class="table-users">
-                <div class="header">Product ID: ${product.getId()}</div>
-                <table style="width:100%" cellspacing="0">
-                    <tr>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Remove</th>
-                    </tr>
-                    <tr>
-                        <td><img src="images/${product.getImage()}" height="150px" width="150px"></td>
-                        <td><c:out value="${product.getName()}"/></td>
-                        <td><c:out value="${ product.getPrice()} tenge"/></td>
-                        <td>
-                            <a href="productsController?page=remove&id=<c:out value="${product.getId()}"/>">Remove</a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <center><c:set var="totalPrice" value="${totalPrice + product.getPrice() }"/></center>
+        <c:if test="${products.key == product.getId() }">
+            <c:forEach var="value" begin="1" end="${products.value}">
+                <div class="table-users">
+                    <div class="header">Product ID: ${product.getId()}</div>
+                    <table style="width:100%" cellspacing="0">
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Remove</th>
+                        </tr>
+                        <tr>
+                            <td><img src="images/${product.getImage()}" height="150px" width="150px"></td>
+                            <td><c:out value="${product.getName()}"/></td>
+                            <td><c:out value="${ product.getPrice()} tenge"/></td>
+                            <td>
+                                <a href="productsController?page=remove&id=<c:out value="${product.getId()}"/>">Remove</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <center><c:set var="totalPrice" value="${totalPrice + product.getPrice() }"/></center>
+            </c:forEach>
         </c:if>
     </c:forEach>
 </c:forEach>

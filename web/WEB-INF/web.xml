@@ -21,15 +21,6 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>Servlet</servlet-name>
-        <servlet-class>Servlets.Servlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Servlet</servlet-name>
-        <url-pattern>/servlet</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>Servlets.LoginServlet</servlet-class>
     </servlet>

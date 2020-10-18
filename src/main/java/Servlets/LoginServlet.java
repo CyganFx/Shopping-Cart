@@ -13,15 +13,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet(name = "Servlets.LoginServlet")
 public class LoginServlet extends HttpServlet {
     static ArrayList<Product> list = new ArrayList<>();
-    static ArrayList<String> cartlist = new ArrayList<>();
+    static Map<String, Integer> cartlist = new HashMap<>();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");

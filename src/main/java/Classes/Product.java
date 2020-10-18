@@ -1,8 +1,6 @@
 package Classes;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 public class Product implements Comparator<Product>, Comparable<Product> {
     public static final String TABLE_NAME = "product";
@@ -68,19 +66,22 @@ public class Product implements Comparator<Product>, Comparable<Product> {
         return list;
     }
 
-    public boolean checkId(ArrayList<String> cartlist, String id2) {
-        for (String id : cartlist) {
-            if (id.equals(id2))
-                return true;
-        }
-        return false;
+    public boolean checkId(Map<String, Integer> cartlist, String id2) {
+        int counter = (int) cartlist.entrySet().stream().filter(pair -> pair.getKey().equals(id2)).count();
+        return counter != 0;
     }
 
-    public ArrayList<String> removeFromCartlist(ArrayList<String> cartlist, String id) {
-        for (String cid : cartlist) {
-            if (cid.equals(id)) {
-                cartlist.remove(cid);
-                break;
+    //we can remove key from map in loop only with iterator, foreach won't work
+    public Map<String, Integer> removeFromCartlist(Map<String, Integer> cartlist, String id) {
+        Iterator<Map.Entry<String, Integer>> itr = cartlist.entrySet().iterator();
+        while (itr.hasNext()) {
+            Map.Entry<String, Integer> entry = itr.next();
+            if (entry.getKey().equals(id)) {
+                if (entry.getValue() == 1) {
+                    itr.remove();
+                } else {
+                    cartlist.put(entry.getKey(), entry.getValue() - 1);
+                }
             }
         }
         return cartlist;

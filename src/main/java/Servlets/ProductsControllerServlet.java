@@ -22,9 +22,7 @@ public class ProductsControllerServlet extends HttpServlet {
     HttpSession session;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         String page = request.getParameter("page");
-        out = response.getWriter();
         session = request.getSession();
         if (session.getAttribute("list") == null) {
             Dao dao = new Dao();
@@ -36,21 +34,6 @@ public class ProductsControllerServlet extends HttpServlet {
 
         if (page.equals("furniture") || page.equals("sport") || page.equals("gadgets")) {
             redirect(request, response, page);
-        }
-
-        if (page.equals("addToCart")) {
-
-            String id = request.getParameter("id");
-            String action = request.getParameter("action"); //category
-            Product p = new Product();
-            boolean check = p.checkId(cartlist, id);
-            if (check) {
-                out.println("Product is already added to Cart");
-                out.println("<center><a href='productsController?page=" + action + "'>Return</a></center>");
-            } else {
-                cartlist.add(id);
-                redirect(request, response, action);
-            }
         }
 
         if (page.equals("showcart")) {
@@ -82,6 +65,34 @@ public class ProductsControllerServlet extends HttpServlet {
         }
     }
 
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        out = response.getWriter();
+        String page = request.getParameter("page");
+
+        if (page.equals("addToCart")) {
+            String action = request.getParameter("action"); //category
+            String id = request.getParameter("id");
+            int amount = Integer.parseInt(request.getParameter("amount"));
+            Product p = new Product();
+            boolean check = p.checkId(cartlist, id);
+
+            if (check) {
+                out.println("Product is already added to Cart");
+                out.println("<center><a href='productsController?page=" + action + "'>Return</a></center>");
+            } else {
+                cartlist.put(id, amount);
+                if (session.getAttribute("list") == null) {
+                    Dao dao = new Dao();
+                    list = dao.getAllProducts();
+                    request.setAttribute("list", list);
+                }
+                redirect(request, response, action);
+            }
+        }
+    }
+
     private void redirect(HttpServletRequest request, HttpServletResponse response, String category) throws ServletException, IOException {
         if (category.equals("furniture")) {
             request.getRequestDispatcher("furniture.jsp").forward(request, response);
@@ -92,9 +103,6 @@ public class ProductsControllerServlet extends HttpServlet {
         if (category.equals("gadgets")) {
             request.getRequestDispatcher("gadgets.jsp").forward(request, response);
         }
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     }
 
     @Override
