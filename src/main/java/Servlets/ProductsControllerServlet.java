@@ -12,13 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
+import static Servlets.LoginServlet.list;
 import static Servlets.LoginServlet.cartlist;
 
 @WebServlet(name = "Servlets.ProductsControllerServlet")
 public class ProductsControllerServlet extends HttpServlet {
-    ArrayList<Product> list = new ArrayList<>();
     PrintWriter out;
     HttpSession session;
 
@@ -72,7 +71,15 @@ public class ProductsControllerServlet extends HttpServlet {
             redirect(request, response, action);
         }
 
-        //TODO remove from cart
+        if (page.equals("remove")) {
+            String id = request.getParameter("id");
+            Product p = new Product();
+            cartlist = p.removeFromCartlist(cartlist, id);
+
+            session = request.getSession();
+            session.setAttribute("cartlist", cartlist);
+            request.getRequestDispatcher("cart.jsp").forward(request, response);
+        }
     }
 
     private void redirect(HttpServletRequest request, HttpServletResponse response, String category) throws ServletException, IOException {

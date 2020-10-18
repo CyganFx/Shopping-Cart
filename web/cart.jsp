@@ -1,4 +1,4 @@
-<%--
+<%@ page import="java.io.PrintWriter" %><%--
   Created by IntelliJ IDEA.
   User: Думан
   Date: 18.10.2020
@@ -13,6 +13,20 @@
     <title>Title</title>
 </head>
 <body>
+<%--Cart expire after 60 sec of inactivity--%>
+<%
+    Cookie cartExpireTime = new Cookie("cartExpireTime", "0");
+    cartExpireTime.setMaxAge(10);
+    response.addCookie(cartExpireTime);
+
+    Cookie[] cookies = request.getCookies();
+    PrintWriter pw = response.getWriter();
+    for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("counter")) {
+            pw.println("This session visited website " + cookie.getValue() + " times");
+        }
+    }
+%>
 <c:set var="productsCounter" value="0"/>
 <c:forEach items="${cartlist }" var="products">
     <c:set var="productsCounter" value="${productsCounter + 1 }"/>
@@ -44,7 +58,8 @@
                         <td><img src="images/${product.getImage()}" height="150px" width="150px"></td>
                         <td><c:out value="${product.getName()}"/></td>
                         <td><c:out value="${ product.getPrice()} tenge"/></td>
-                        <td><a href="productsController?page=remove&id=<c:out value="${product.getId()}"/>">Remove</a>
+                        <td>
+                            <a href="productsController?page=remove&id=<c:out value="${product.getId()}"/>">Remove</a>
                         </td>
                     </tr>
                 </table>

@@ -10,16 +10,17 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @WebServlet(name = "Servlets.LoginServlet")
 public class LoginServlet extends HttpServlet {
+    static ArrayList<Product> list = new ArrayList<>();
     static ArrayList<String> cartlist = new ArrayList<>();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,9 +45,14 @@ public class LoginServlet extends HttpServlet {
                 Dao dao = new Dao();
 
                 if (dao.checkLogin(email, password)) {
-                    HttpSession session = request.getSession();
+                    Cookie websiteVisitCounter = new Cookie("counter", "0");
+                    websiteVisitCounter.setMaxAge(3600);
+                    response.addCookie(websiteVisitCounter);
+
                     User user = new User();
 
+                    HttpSession session = request.getSession();
+                    session.setAttribute("cartlist", list);
                     session.setAttribute("cartlist", cartlist);
 
                     user.setEmail(email);

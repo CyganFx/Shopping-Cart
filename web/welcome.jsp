@@ -20,7 +20,19 @@
 
 <% if (session.getAttribute("email") == null) {
     response.sendRedirect(request.getContextPath() + "/id-check?id=" + application.getInitParameter("correctId"));
-} %>
+} else {
+    Cookie[] cookies = request.getCookies();
+    int counter;
+    for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("counter")) {
+            counter = Integer.parseInt(cookie.getValue());
+            counter++;
+            cookie.setValue(counter + "");
+            response.addCookie(cookie);
+        }
+    }
+}
+%>
 
 <%-- Using JSTL to get data from sessions --%>
 
@@ -59,6 +71,9 @@
         </div>
     </div>
 </div>
+<form action="logout" method="post">
+    <input type="submit" value="Logout">
+</form>
 <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
 <script src="javascript/toggle.js"></script>
 </body>

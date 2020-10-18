@@ -69,11 +69,21 @@ public class Product implements Comparator<Product>, Comparable<Product> {
     }
 
     public boolean checkId(ArrayList<String> cartlist, String id2) {
-        for(String id : cartlist) {
-            if(id.equals(id2))
+        for (String id : cartlist) {
+            if (id.equals(id2))
                 return true;
         }
         return false;
+    }
+
+    public ArrayList<String> removeFromCartlist(ArrayList<String> cartlist, String id) {
+        for (String cid : cartlist) {
+            if (cid.equals(id)) {
+                cartlist.remove(cid);
+                break;
+            }
+        }
+        return cartlist;
     }
 
     @Override
